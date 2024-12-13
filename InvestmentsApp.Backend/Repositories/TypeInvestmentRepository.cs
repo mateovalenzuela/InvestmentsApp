@@ -1,5 +1,4 @@
-﻿using InvestmentsApp.Backend.Context;
-using InvestmentsApp.Backend.Models;
+﻿using InvestmentsApp.Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvestmentsApp.Backend.Repositories

@@ -1,7 +1,6 @@
-﻿using InvestmentsApp.Backend.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace InvestmentsApp.Backend.Context
+namespace InvestmentsApp.Backend.Models
 {
     public class InvestmentsAppContext : DbContext
     {
