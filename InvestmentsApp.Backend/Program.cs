@@ -1,4 +1,8 @@
+using AutoMapper;
 using InvestmentsApp.Backend.Models;
+using InvestmentsApp.Backend.Repositories;
+using InvestmentsApp.Backend.Services;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +14,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<InvestmentsAppContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"))
 );
+
+// Mappers
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
+// Services
+builder.Services.AddScoped<ITypeInvestmentService, TypeInvestmentService>();
+
+
+// Repositories
+builder.Services.AddScoped<ITypeInvestmentRepository, TypeInvestmentRepository>();
+builder.Services.AddScoped<IInvestmentRepository, InvestmentRepository>();
+
 
 
 
