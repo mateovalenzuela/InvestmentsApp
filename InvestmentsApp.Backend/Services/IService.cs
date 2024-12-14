@@ -12,8 +12,5 @@
         Task<Dto?> Update(long id, updateDto dto);
 
         Task<Dto?> Delete(long id);
-
-        bool Validate(insertDto dto);
-        bool Validate(long id, updateDto dto);
     }
 }

@@ -79,7 +79,7 @@ namespace InvestmentsApp.Backend.Services
         {
             var investments = await _repository.GetActiveByTicker(ticker);
 
-            if (investments.Count() > 0)
+            if (investments != null)
             {
                 var investmentDto = investments.Select(i => _mapper.Map<InvestmentDto>(i)).ToList();
                 return investmentDto;
@@ -92,7 +92,7 @@ namespace InvestmentsApp.Backend.Services
         {
             var investments = await _repository.GetActiveByTypeInvestment(idTypeInvestment);
 
-            if (investments.Count() > 0)
+            if (investments != null)
             {
                 var investmentDto = investments.Select(i => _mapper.Map<InvestmentDto>(i)).ToList();
                 return investmentDto;
@@ -107,6 +107,14 @@ namespace InvestmentsApp.Backend.Services
 
             if (investment != null)
             {
+                investment.Tikcker = dto.Tikcker;
+                investment.ImporteInicial = dto.ImporteInicial;
+                investment.ImporteFinal = dto.ImporteFinal;
+                investment.Descripcion = dto.Descripcion;
+                investment.FechaEntrada = dto.FechaEntrada;
+                investment.FechaCierre = dto.FechaCierre;
+                investment.IdTypeInvestment = dto.IdTypeInvestment;
+
                 _repository.Update(investment);
                 await _repository.Save();
 
@@ -117,11 +125,11 @@ namespace InvestmentsApp.Backend.Services
             return null;
         }
 
-        public bool Validate(InsertInvestmentDto dto)
+        public async Task<bool> Validate(InsertInvestmentDto dto)
         {
             bool flag = true;
 
-            var typeInvestment = _typeInvestmentRepository.GetActive(dto.IdTypeInvestment);
+            var typeInvestment = await _typeInvestmentRepository.GetActive(dto.IdTypeInvestment);
             if (typeInvestment == null)
             {
                 Errors.Add("TypeInvestment", "El TypeInvestment no existe");
@@ -131,11 +139,11 @@ namespace InvestmentsApp.Backend.Services
             return flag;
         }
 
-        public bool Validate(long id, UpdateInvestmentDto dto)
+        public async Task<bool> Validate(long id, UpdateInvestmentDto dto)
         {
             bool flag = true;
 
-            var typeInvestment = _typeInvestmentRepository.GetActive(dto.IdTypeInvestment);
+            var typeInvestment = await _typeInvestmentRepository.GetActive(dto.IdTypeInvestment);
             if (typeInvestment == null)
             {
                 Errors.Add("TypeInvestment", "El TypeInvestment no existe");
