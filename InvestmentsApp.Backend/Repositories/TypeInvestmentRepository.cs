@@ -1,9 +1,10 @@
 ﻿using InvestmentsApp.Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace InvestmentsApp.Backend.Repositories
 {
-    public class TypeInvestmentRepository : ITypeInvestment
+    public class TypeInvestmentRepository : ITypeInvestmentRepository
     {
         private readonly InvestmentsAppContext _context;
 
@@ -46,6 +47,12 @@ namespace InvestmentsApp.Backend.Repositories
         public async Task Save()
             => await _context.SaveChangesAsync();
 
+        public IEnumerable<TypeInvestment> Search(Func<TypeInvestment, bool> filter, int limit)
+             =>  _context.TypeInvestments.Where(filter)
+                .Take(limit)
+                .OrderBy(i => i.Id)
+                .ToList();
+        
 
         public void Update(TypeInvestment entity)
         {
