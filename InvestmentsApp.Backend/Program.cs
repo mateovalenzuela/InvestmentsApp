@@ -20,6 +20,7 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 // Services
 builder.Services.AddScoped<ITypeInvestmentService, TypeInvestmentService>();
+builder.Services.AddScoped<IInvestmentService,  InvestmentService>();
 
 
 // Repositories

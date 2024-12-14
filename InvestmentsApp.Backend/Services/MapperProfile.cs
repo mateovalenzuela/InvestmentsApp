@@ -11,10 +11,12 @@ namespace InvestmentsApp.Backend.Services
         {
             // TypeInvestment
             CreateMap<InsertTypeInvestmentDto, TypeInvestment>();
+            CreateMap<UpdateTypeInvestmentDto, TypeInvestment>();
             CreateMap<TypeInvestment, TypeInvestmentDto>();
 
             //Investment
             CreateMap<InsertInvestmentDto, Investmetn>();
+            CreateMap<UpdateTypeInvestmentDto, Investmetn>();
             CreateMap<Investmetn, InvestmentDto>();
         }
     }
