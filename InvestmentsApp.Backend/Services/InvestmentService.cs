@@ -136,6 +136,12 @@ namespace InvestmentsApp.Backend.Services
                 flag = false;
             }
 
+            if (dto.FechaCierre < dto.FechaEntrada)
+            {
+                Errors.Add("FechaCierre", "La Fecha de Cierre no puede ser anterior a la fecha de Entrada");
+                flag = false;
+            }
+
             return flag;
         }
 
@@ -147,6 +153,12 @@ namespace InvestmentsApp.Backend.Services
             if (typeInvestment == null)
             {
                 Errors.Add("TypeInvestment", "El TypeInvestment no existe");
+                flag = false;
+            }
+
+            if (dto.FechaCierre < dto.FechaEntrada)
+            {
+                Errors.Add("FechaCierre", "La Fecha de Cierre no puede ser anterior a la fecha de Entrada");
                 flag = false;
             }
 
