@@ -1,5 +1,4 @@
-﻿using InvestmentsApp.Backend.DTOs.Investment;
-using InvestmentsApp.Backend.DTOs.TypeInvestment;
+﻿using InvestmentsApp.Backend.DTOs.TypeInvestment;
 
 namespace InvestmentsApp.Backend.Services
 {

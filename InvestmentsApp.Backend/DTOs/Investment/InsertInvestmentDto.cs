@@ -1,6 +1,7 @@
 ﻿using InvestmentsApp.Backend.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace InvestmentsApp.Backend.DTOs.Investment
 {
@@ -14,11 +15,11 @@ namespace InvestmentsApp.Backend.DTOs.Investment
         public string? Descripcion { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(18,2)")]
+        [Range(0, 9999999999999999.99, ErrorMessage = "El Importe debe ser positivo y con menos de 19 dígitos")]
         public decimal ImporteInicial { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(18,2)")]
+        [Range(0, 9999999999999999.99, ErrorMessage ="El Importe debe ser positivo y con menos de 19 dígitos")]
         public decimal ImporteFinal { get; set; }
 
         [Required]
