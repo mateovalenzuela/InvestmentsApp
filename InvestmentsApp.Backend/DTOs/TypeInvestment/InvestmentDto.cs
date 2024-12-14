@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace InvestmentsApp.Backend.DTOs
+namespace InvestmentsApp.Backend.DTOs.TypeInvestment
 {
     public class InvestmentDto
     {
