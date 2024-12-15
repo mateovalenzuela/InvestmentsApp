@@ -7,6 +7,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+// agregado de http client
+builder.Services.AddHttpClient();
+
+// confiración de client
+builder.Services.AddTransient<ClientSwagger.ClientSwagger>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var baseUrl = configuration["ApiSettings:BaseUrl"];
+    var httpClient = provider.GetRequiredService<IHttpClientFactory>().CreateClient(); // Usa IHttpClientFactory
+    return new ClientSwagger.ClientSwagger(baseUrl, httpClient);
+});
+
+
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
