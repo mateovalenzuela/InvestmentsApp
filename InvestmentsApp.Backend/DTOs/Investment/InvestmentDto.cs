@@ -26,6 +26,8 @@ namespace InvestmentsApp.Backend.DTOs.Investment
 
         public decimal Rendimiento {  get; set; }
 
+        public string TypeInvestmentDescripcion { get; set; }
+
         public InvestmentDto()
         {
             if (ImporteInicial != 0)
