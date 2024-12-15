@@ -15,11 +15,11 @@ namespace InvestmentsApp.Backend.DTOs.Investment
         public string? Descripcion { get; set; }
 
         [Required]
-        [Range(0, 9999999999999999.99, ErrorMessage = "El Importe debe ser positivo y con menos de 19 dígitos")]
+        [Range(1, 9999999999999999.99, ErrorMessage = "El Importe debe ser positivo y con menos de 19 dígitos")]
         public decimal ImporteInicial { get; set; }
 
         [Required]
-        [Range(0, 9999999999999999.99, ErrorMessage ="El Importe debe ser positivo y con menos de 19 dígitos")]
+        [Range(1, 9999999999999999.99, ErrorMessage ="El Importe debe ser positivo y con menos de 19 dígitos")]
         public decimal ImporteFinal { get; set; }
 
         [Required]
@@ -29,6 +29,8 @@ namespace InvestmentsApp.Backend.DTOs.Investment
         public DateTime FechaCierre { get; set; }
 
         [Required]
+        [Range(1, long.MaxValue, ErrorMessage = "El IdTypeInvestment debe ser positivo y mayor a 0")]
+
         public long IdTypeInvestment { get; set; }
 
         [Required]
