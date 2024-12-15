@@ -1,3 +1,4 @@
+using InvestmentsApp.Frontend.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -18,6 +19,10 @@ builder.Services.AddTransient<ClientSwagger.ClientSwagger>(provider =>
     var httpClient = provider.GetRequiredService<IHttpClientFactory>().CreateClient(); // Usa IHttpClientFactory
     return new ClientSwagger.ClientSwagger(baseUrl, httpClient);
 });
+
+// Inyección de servicios
+builder.Services.AddScoped<IInvestmentService, InvestmentService>();
+builder.Services.AddScoped<ITypeInvestmentService, TypeInvestmentService>();
 
 
 var app = builder.Build();

@@ -1,5 +1,6 @@
 ﻿@page "/"
-@inject ClientSwagger.ClientSwagger ApiClient
+@using InvestmentsApp.Frontend.Services
+@inject IInvestmentService InvestmentService
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 
@@ -58,12 +59,19 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await GetInvestments();
+        try {
+            await GetInvestments();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener las inversiónes: {ex.Message}");
+        }
+        
     }
 
     private async Task GetInvestments()
     {
-        investments = await ApiClient.InvestmentAllAsync();
+        investments = await InvestmentService.GetInvestments();
     }
 
     private void NavigateToAddInvestment()
@@ -96,6 +104,6 @@ else
 
     private async Task DeleteInvestment(long id)
     {
-        await ApiClient.InvestmentDELETEAsync(id);
+        await InvestmentService.DeleteInvestment(id);
     }
 }
