@@ -1,4 +1,3 @@
-using InvestmentsApp.Frontend.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -20,8 +19,6 @@ builder.Services.AddTransient<ClientSwagger.ClientSwagger>(provider =>
     return new ClientSwagger.ClientSwagger(baseUrl, httpClient);
 });
 
-
-builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
 
