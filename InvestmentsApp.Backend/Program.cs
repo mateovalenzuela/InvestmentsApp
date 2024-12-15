@@ -4,6 +4,7 @@ using InvestmentsApp.Backend.Repositories;
 using InvestmentsApp.Backend.Services;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,18 @@ builder.Services.AddScoped<IInvestmentService,  InvestmentService>();
 builder.Services.AddScoped<ITypeInvestmentRepository, TypeInvestmentRepository>();
 builder.Services.AddScoped<IInvestmentRepository, InvestmentRepository>();
 
+var myPolicy = "MyCorsPolicy";
 
+// Agregar servicios CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(myPolicy, policy =>
+    {
+        policy.AllowAnyOrigin() 
+              .AllowAnyHeader() 
+              .AllowAnyMethod();
+    });
+});
 
 
 builder.Services.AddControllers();
@@ -52,6 +64,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Estableciendo mi politica de acceso
+app.UseCors(myPolicy);
 
 app.UseAuthorization();
 
