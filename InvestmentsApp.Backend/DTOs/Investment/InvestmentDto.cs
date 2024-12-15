@@ -24,5 +24,19 @@ namespace InvestmentsApp.Backend.DTOs.Investment
 
         public long IdTypeInvestment { get; set; }
 
+        public decimal Rendimiento {  get; set; }
+
+        public InvestmentDto()
+        {
+            if (ImporteInicial != 0)
+            {
+                Rendimiento = ((ImporteFinal - ImporteInicial) / ImporteInicial) * 100;
+            }
+            else
+            {
+                Rendimiento = 0;
+            }
+        }
+
     }
 }

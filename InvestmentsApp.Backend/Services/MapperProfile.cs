@@ -17,7 +17,12 @@ namespace InvestmentsApp.Backend.Services
             //Investment
             CreateMap<InsertInvestmentDto, Investmetn>();
             CreateMap<UpdateTypeInvestmentDto, Investmetn>();
-            CreateMap<Investmetn, InvestmentDto>();
+            CreateMap<Investmetn, InvestmentDto>()
+                .ForMember(dest => dest.Rendimiento, opt => opt.
+                MapFrom(src =>src.ImporteInicial != 0
+                    ? ((src.ImporteFinal - src.ImporteInicial) / src.ImporteInicial) * 100
+                    : 0
+                ));
         }
     }
 }
