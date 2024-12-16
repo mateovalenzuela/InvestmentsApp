@@ -1,8 +1,10 @@
-﻿namespace InvestmentsApp.Frontend.Services
+﻿using ClientSwagger;
+
+namespace InvestmentsApp.Frontend.Services
 {
     public interface ITypeInvestmentService
     {
-        Task AddTypeInvestment(ClientSwagger.InsertTypeInvestmentDto dto);
+        Task<TypeInvestmentDto> AddTypeInvestment(ClientSwagger.InsertTypeInvestmentDto dto);
 
         Task<ClientSwagger.TypeInvestmentDto> GetSelectedTypeInvestment(long id);
 
