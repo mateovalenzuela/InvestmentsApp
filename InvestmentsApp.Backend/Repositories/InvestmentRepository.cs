@@ -24,7 +24,9 @@ namespace InvestmentsApp.Backend.Repositories
 
         public async Task<Investment> GetActive(long id)
         {
-            var investment = await _context.Investments.FindAsync(id);
+            var investment = await _context.Investments
+                .Include(i => i.TypeInvestment)
+                .FirstOrDefaultAsync(i => i.Id == id && i.Baja == false);
 
             if (investment == null)
             {
