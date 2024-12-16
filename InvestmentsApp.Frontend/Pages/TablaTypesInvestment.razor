@@ -1,0 +1,59 @@
+﻿@using InvestmentsApp.Frontend.Services
+@inject ITypeInvestmentService TypeInvestmentService
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<h3>Tabla de Tipos de Inversiones</h3>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var type in TypesInvestments)
+        {
+            <tr>
+                <td>@type.Descripcion</td>
+                <td>
+                    <EditButton OnClick="() => HandleUpdateTypeInvestment(type.Id)" />
+                    <DeleteButton OnClick="() => HandleDeleteTypesInvestment(type)" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public IEnumerable<ClientSwagger.TypeInvestmentDto> TypesInvestments { get; set; }
+
+    private async Task ConfirmDeleteTypesInvestment(ClientSwagger.TypeInvestmentDto typeInvestment)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Estás seguro de que deseas eliminr el tipo de Inversión {typeInvestment.Descripcion}?");
+
+        if (confirmed)
+        {
+            await DeleteTypeInvestment(typeInvestment.Id);
+        }
+    }
+
+    private async Task HandleDeleteTypesInvestment(ClientSwagger.TypeInvestmentDto typeInvestment)
+    {
+        await ConfirmDeleteTypesInvestment(typeInvestment);
+        Navigation.NavigateTo("/typesInvestment", forceLoad: true);
+    }
+
+    private async Task DeleteTypeInvestment(long id)
+    {
+        await TypeInvestmentService.DeleteTypeInvestment(id);
+    }
+
+    private void HandleUpdateTypeInvestment(long id)
+    {
+        Navigation.NavigateTo($"/typeInvestmentUpdate/{id}");
+    }
+
+}

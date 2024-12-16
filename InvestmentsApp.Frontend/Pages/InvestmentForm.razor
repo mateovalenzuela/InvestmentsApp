@@ -1,0 +1,95 @@
+﻿@page "/investmentAddForm"
+@using InvestmentsApp.Frontend.Services
+@inject IInvestmentService InvestmentService
+@inject ITypeInvestmentService TypeInvestmentService
+@inject NavigationManager Navigation
+
+<h3>Agregar Inversión</h3>
+
+<EditForm Model="@newInvestment" OnValidSubmit="HandleSaveInvestment">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Ticker:</label>
+        <InputText @bind-Value="newInvestment.Tikcker" class="form-control" />
+        <ValidationMessage For="@(() => newInvestment.Tikcker)" />
+    </div>
+
+    <div>
+        <label>Tipo de Inversión:</label>
+        <select @bind="newInvestment.IdTypeInvestment" class="form-control">
+
+            @if(tiposDeInversion == null){
+                <option disable value="">"No hay categorias cargadas"</option>
+            }
+            else
+            {
+                <option value="">Seleccione un tipo</option>
+
+                @foreach (var tipo in tiposDeInversion)
+                {
+                    <option value="@tipo.Id">@tipo.Descripcion</option>
+                }
+            }
+
+        </select>
+        <ValidationMessage For="@(() => newInvestment.IdTypeInvestment)" />
+    </div>
+
+    <div>
+        <label>Descripción:</label>
+        <InputText @bind-Value="newInvestment.Descripcion" class="form-control" />
+        <ValidationMessage For="@(() => newInvestment.Descripcion)" />
+    </div>
+
+    <div>
+        <label>Fecha de Entrada:</label>
+        <InputDate @bind-Value="newInvestment.FechaEntrada" class="form-control" />
+        <ValidationMessage For="@(() => newInvestment.FechaEntrada)" />
+    </div>
+
+    <div>
+        <label>Fecha de Cierre:</label>
+        <InputDate @bind-Value="newInvestment.FechaCierre" class="form-control" />
+        <ValidationMessage For="@(() => newInvestment.FechaCierre)" />
+    </div>
+
+    <div>
+        <label>Importe Inicial:</label>
+        <InputNumber @bind-Value="newInvestment.ImporteInicial" class="form-control" />
+        <ValidationMessage For="@(() => newInvestment.ImporteInicial)" />
+    </div>
+
+    <div>
+        <label>Importe Final:</label>
+        <InputNumber @bind-Value="newInvestment.ImporteFinal" class="form-control" />
+        <ValidationMessage For="@(() => newInvestment.ImporteFinal)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</EditForm>
+
+@code {
+    private ClientSwagger.InsertInvestmentDto newInvestment = new();
+    private IEnumerable<ClientSwagger.TypeInvestmentDto>? tiposDeInversion;
+
+    protected override async Task OnInitializedAsync()
+    {
+        newInvestment = new ClientSwagger.InsertInvestmentDto();
+        tiposDeInversion = await GetTypeInvestment();
+    }
+
+    private async Task HandleSaveInvestment()
+    {
+
+        var result = await InvestmentService.AddInvestment(newInvestment);
+        Navigation.NavigateTo("/");
+    }
+
+
+    private async Task<IEnumerable<ClientSwagger.TypeInvestmentDto>> GetTypeInvestment()
+        =>  await TypeInvestmentService.GetTypesInvestment();
+    
+}
+

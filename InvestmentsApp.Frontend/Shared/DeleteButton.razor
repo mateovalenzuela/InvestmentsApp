@@ -1,0 +1,15 @@
+﻿
+<button class="btn btn-danger btn-sm" @onclick="HandleClick">Eliminar</button>
+
+@code {
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private async Task HandleClick()
+    {
+        if (OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync(null);
+        }
+    }
+}

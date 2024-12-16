@@ -1,4 +1,4 @@
-using InvestmentsApp.Frontend.Data;
+using InvestmentsApp.Frontend.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -7,7 +7,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
+// agregado de http client
+builder.Services.AddHttpClient();
+
+// confiración de client
+builder.Services.AddTransient<ClientSwagger.ClientSwagger>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    var baseUrl = configuration["ApiSettings:BaseUrl"];
+    var httpClient = provider.GetRequiredService<IHttpClientFactory>().CreateClient(); // Usa IHttpClientFactory
+    return new ClientSwagger.ClientSwagger(baseUrl, httpClient);
+});
+
+// Inyección de servicios
+builder.Services.AddScoped<IInvestmentService, InvestmentService>();
+builder.Services.AddScoped<ITypeInvestmentService, TypeInvestmentService>();
+
 
 var app = builder.Build();
 
