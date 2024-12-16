@@ -12,8 +12,8 @@
 
     <div>
         <label>Ticker:</label>
-        <InputText @bind-Value="investmentToEdit.Tikcker" class="form-control" />
-        <ValidationMessage For="@(() => investmentToEdit.Tikcker)" />
+        <InputText @bind-Value="investmentToEdit.Ticker" class="form-control" />
+        <ValidationMessage For="@(() => investmentToEdit.Ticker)" />
     </div>
 
     <div>
@@ -117,7 +117,7 @@
 
         var updateInvestmentDto = new ClientSwagger.UpdateInvestmentDto
         {
-            Tikcker = investmentDto.Tikcker,
+            Ticker = investmentDto.Ticker,
             Descripcion = investmentDto.Descripcion,
             FechaEntrada = investmentDto.FechaEntrada,
             FechaCierre = investmentDto.FechaCierre,
