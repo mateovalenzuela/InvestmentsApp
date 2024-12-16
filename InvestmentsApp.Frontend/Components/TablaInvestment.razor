@@ -1,0 +1,81 @@
+﻿@using InvestmentsApp.Frontend.Services
+@inject IInvestmentService InvestmentService
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<div class="row justify-content-center">
+    <div class="col 10">
+        <table class="table table-striped table-responsive">
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center" scope="col">Ticker</th>
+                    <th class="text-center" scope="col">Categoría</th>
+                    <th class="text-center" scope="col">Fecha de Cierre</th>
+                    <th class="text-center" scope="col">Importe Inicial</th>
+                    <th class="text-center" scope="col">Importe Final</th>
+                    <th class="text-center" scope="col">Rendimiento</th>
+                    <th class="text-center" scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var investment in Investments)
+                {
+                    <tr @onclick="() => HandleDetailInvestment(investment.Id)">
+                        <td class="text-center">@investment.Ticker</td>
+                        <td class="text-center">@investment.TypeInvestmentDescripcion</td>
+                        <td class="text-center">@investment.FechaCierre.ToLocalTime().ToString("dd/MM/yyyy")</td>
+                        <td class="text-center">$@investment.ImporteInicial</td>
+                        <td class="text-center">$@investment.ImporteFinal</td>
+                        <td class="text-center">@investment.Rendimiento.ToString("0.00")%</td>
+                        <td class="text-center">
+                            <EditButton OnClick="() =>NavigateToEditInvestment(investment.Id)"/>
+                            <DeleteButton OnClick="() => HandleDeleteInvestment(investment)" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+@code {
+    [Parameter]
+    public IEnumerable<ClientSwagger.InvestmentDto> Investments { get; set; }
+
+    private void NavigateToEditInvestment(long id)
+    {
+        Navigation.NavigateTo($"/investmentEditForm/{id}");
+    }
+
+    private async Task ConfirmDeleteInvestment(ClientSwagger.InvestmentDto investment)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Estás seguro de que deseas eliminar la inversión con Ticker {investment.Ticker}?");
+
+        if (confirmed)
+        {
+            await DeleteInvestment(investment.Id);
+        }
+    }
+
+    private async Task HandleDeleteInvestment(ClientSwagger.InvestmentDto investment)
+    {
+        await ConfirmDeleteInvestment(investment);
+        Navigation.NavigateTo("/", forceLoad: true);
+
+    }
+
+    private async Task DeleteInvestment(long id)
+    {
+        await InvestmentService.DeleteInvestment(id);
+    }
+
+    private async Task HandleDetailInvestment(long id)
+    {
+        Navigation.NavigateTo($"/investmentDetail/{id}");
+
+    }
+}
+

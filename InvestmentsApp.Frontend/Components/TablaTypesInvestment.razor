@@ -4,21 +4,19 @@
 @inject IJSRuntime JSRuntime
 
 <div class="">
-    <h3>Tabla de Tipos de Inversiones</h3>
-
     <table class="table table-striped table-responsive">
         <thead class="table-dark">
             <tr>
-                <th scope="col">Descripción</th>
-                <th scope="col">Acciones</th>
+                <th class="text-center" scope="col">Descripción</th>
+                <th class="text-center" scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var type in TypesInvestments)
             {
                 <tr>
-                    <td>@type.Descripcion</td>
-                    <td>
+                    <td class="text-center">@type.Descripcion</td>
+                    <td class="text-center">
                         <EditButton OnClick="() => HandleUpdateTypeInvestment(type.Id)" />
                         <DeleteButton OnClick="() => HandleDeleteTypesInvestment(type)" />
                     </td>
