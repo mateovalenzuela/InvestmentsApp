@@ -44,7 +44,7 @@ namespace InvestmentsApp.Backend.Repositories
             var investments = await _context.Investmetns
                 .Where(i => i.Tikcker == ticker && i.Baja == false)
                 .Include(i => i.TypeInvestment)
-                .OrderBy(i => i.Id)
+                .OrderByDescending(i => i.Id)
                 .ToListAsync();
 
             if (investments.Count != 0)
@@ -60,7 +60,7 @@ namespace InvestmentsApp.Backend.Repositories
             var investments = await _context.Investmetns
                 .Where(i => i.IdTypeInvestment == idTypeInvestment &&i.Baja == false)
                 .Include(i => i.TypeInvestment)
-                .OrderBy(i => i.Id)
+                .OrderByDescending(i => i.Id)
                 .ToListAsync();
 
             if (investments.Count != 0)
@@ -75,7 +75,7 @@ namespace InvestmentsApp.Backend.Repositories
             => await _context.Investmetns
             .Where(i => i.Baja == false)
             .Include(i => i.TypeInvestment)
-            .OrderBy(i => i.Id)
+            .OrderByDescending(i => i.Id)
             .ToListAsync();
 
         public async Task Save()
@@ -84,7 +84,7 @@ namespace InvestmentsApp.Backend.Repositories
         public IEnumerable<Investmetn> Search(Func<Investmetn, bool> filter, int limit)
             => _context.Investmetns.Where(filter)
             .Take(limit)
-            .OrderBy(i => i.Id)
+            .OrderByDescending(i => i.Id)
             .ToList();
 
         public void Update(Investmetn entity)
