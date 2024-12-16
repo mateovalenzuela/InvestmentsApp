@@ -2,12 +2,11 @@
 @using InvestmentsApp.Frontend.Services
 @inject IInvestmentService InvestmentService
 @inject NavigationManager Navigation
-@inject IJSRuntime JSRuntime
 
 <h3 class="text-primary">Lista de Inversiones</h3>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <button class="btn btn-success" @onclick="NavigateToAddInvestment">Agregar Inversión</button>
+    <AgregarButton OnClick="() => NavigateToAddInvestment()" />
 </div>
 
 @if (investments == null)
@@ -20,38 +19,7 @@ else @if (investments.Count() == 0)
 }
 else
 {
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Ticker</th>
-                <th>Categoría</th>
-                <th>Fecha de Entrada</th>
-                <th>Fecha de Cierre</th>
-                <th>Importe Inicial</th>
-                <th>Importe Final</th>
-                <th>Rendimiento</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var investment in investments)
-            {
-                <tr>
-                    <td>@investment.Tikcker</td>
-                    <td>@investment.TypeInvestmentDescripcion</td>
-                    <td>@investment.FechaEntrada.ToLocalTime().Date</td>
-                    <td>@investment.FechaCierre.ToLocalTime().Date</td>
-                    <td>$@investment.ImporteInicial</td>
-                    <td>$@investment.ImporteFinal</td>
-                    <td>%@investment.Rendimiento</td>
-                    <td>
-                        <button class="btn btn-primary btn-sm me-2" @onclick="() => NavigateToEditInvestment(investment.Id)">Editar</button>
-                        <button class="btn btn-danger btn-sm" @onclick="() => HandleDeleteInvestment(investment)">Eliminar</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <TablaInvestment Investments="@investments"></TablaInvestment>
 }
 
 @code {
@@ -78,32 +46,5 @@ else
     {
         Navigation.NavigateTo("/investmentAddForm");
     }
-
-    private void NavigateToEditInvestment(long id)
-    {
-        Navigation.NavigateTo($"/investmentEditForm/{id}");
-    }
-
-    private async Task ConfirmDeleteInvestment(long id, string ticker)
-    {
-        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Estás seguro de que deseas eliminar la inversión con Ticker {ticker}?");
-
-        if (confirmed)
-        {
-            await DeleteInvestment(id);
-        }
-    }
-
-
-    private async Task HandleDeleteInvestment(ClientSwagger.InvestmentDto dto)
-    {
-        await ConfirmDeleteInvestment(dto.Id, dto.Tikcker);
-        await GetInvestments();
-
-    }
-
-    private async Task DeleteInvestment(long id)
-    {
-        await InvestmentService.DeleteInvestment(id);
-    }
+   
 }
