@@ -516,11 +516,11 @@
           "idTypeInvestment",
           "importeFinal",
           "importeInicial",
-          "tikcker"
+          "ticker"
         ],
         "type": "object",
         "properties": {
-          "tikcker": {
+          "ticker": {
             "maxLength": 15,
             "minLength": 2,
             "type": "string"
@@ -589,7 +589,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "tikcker": {
+          "ticker": {
             "type": "string",
             "nullable": true
           },
@@ -657,11 +657,11 @@
           "idTypeInvestment",
           "importeFinal",
           "importeInicial",
-          "tikcker"
+          "ticker"
         ],
         "type": "object",
         "properties": {
-          "tikcker": {
+          "ticker": {
             "maxLength": 15,
             "minLength": 2,
             "type": "string"

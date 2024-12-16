@@ -2,13 +2,13 @@
 
 namespace InvestmentsApp.Backend.Repositories
 {
-    public interface IInvestmentRepository : IRepository<Investmetn>
+    public interface IInvestmentRepository : IRepository<Investment>
     {
-        Task<IEnumerable<Investmetn>> GetActiveByTicker(string ticker);
+        Task<IEnumerable<Investment>> GetActiveByTicker(string ticker);
 
-        Task<IEnumerable<Investmetn>> GetActiveByTypeInvestment(long idTypeInvestment);
+        Task<IEnumerable<Investment>> GetActiveByTypeInvestment(long idTypeInvestment);
 
-        IEnumerable<Investmetn> Search(Func<Investmetn, bool> filter, int limit);
+        IEnumerable<Investment> Search(Func<Investment, bool> filter, int limit);
 
     }
 }

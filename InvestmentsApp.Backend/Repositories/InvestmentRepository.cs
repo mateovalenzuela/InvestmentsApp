@@ -12,19 +12,19 @@ namespace InvestmentsApp.Backend.Repositories
             _context = context;
         }
 
-        public async Task Add(Investmetn entity)
-            => await _context.Investmetns.AddAsync(entity);
+        public async Task Add(Investment entity)
+            => await _context.Investments.AddAsync(entity);
 
-        public void BajaLogica(Investmetn entity)
+        public void BajaLogica(Investment entity)
         {
             entity.Baja = true;
-            _context.Investmetns.Attach(entity);
+            _context.Investments.Attach(entity);
             _context.Entry(entity).Property(e => e.Baja).IsModified = true;
         }
 
-        public async Task<Investmetn> GetActive(long id)
+        public async Task<Investment> GetActive(long id)
         {
-            var investment = await _context.Investmetns.FindAsync(id);
+            var investment = await _context.Investments.FindAsync(id);
 
             if (investment == null)
             {
@@ -39,10 +39,10 @@ namespace InvestmentsApp.Backend.Repositories
             return null;
         }
 
-        public async Task<IEnumerable<Investmetn>> GetActiveByTicker(string ticker)
+        public async Task<IEnumerable<Investment>> GetActiveByTicker(string ticker)
         {
-            var investments = await _context.Investmetns
-                .Where(i => i.Tikcker == ticker && i.Baja == false)
+            var investments = await _context.Investments
+                .Where(i => i.Ticker == ticker && i.Baja == false)
                 .Include(i => i.TypeInvestment)
                 .OrderByDescending(i => i.Id)
                 .ToListAsync();
@@ -55,9 +55,9 @@ namespace InvestmentsApp.Backend.Repositories
             return null;
         }
 
-        public async Task<IEnumerable<Investmetn>> GetActiveByTypeInvestment(long idTypeInvestment)
+        public async Task<IEnumerable<Investment>> GetActiveByTypeInvestment(long idTypeInvestment)
         {
-            var investments = await _context.Investmetns
+            var investments = await _context.Investments
                 .Where(i => i.IdTypeInvestment == idTypeInvestment &&i.Baja == false)
                 .Include(i => i.TypeInvestment)
                 .OrderByDescending(i => i.Id)
@@ -71,8 +71,8 @@ namespace InvestmentsApp.Backend.Repositories
             return null;
         }
 
-        public async Task<IEnumerable<Investmetn>> GetAllActives()
-            => await _context.Investmetns
+        public async Task<IEnumerable<Investment>> GetAllActives()
+            => await _context.Investments
             .Where(i => i.Baja == false)
             .Include(i => i.TypeInvestment)
             .OrderByDescending(i => i.Id)
@@ -81,15 +81,15 @@ namespace InvestmentsApp.Backend.Repositories
         public async Task Save()
             => await _context.SaveChangesAsync();
 
-        public IEnumerable<Investmetn> Search(Func<Investmetn, bool> filter, int limit)
-            => _context.Investmetns.Where(filter)
+        public IEnumerable<Investment> Search(Func<Investment, bool> filter, int limit)
+            => _context.Investments.Where(filter)
             .Take(limit)
             .OrderByDescending(i => i.Id)
             .ToList();
 
-        public void Update(Investmetn entity)
+        public void Update(Investment entity)
         {
-            _context.Investmetns.Attach(entity);
+            _context.Investments.Attach(entity);
             _context.Entry(entity).Property(e => e.Baja).IsModified = true;
         }
     }

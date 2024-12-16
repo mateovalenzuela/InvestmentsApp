@@ -20,7 +20,7 @@ namespace InvestmentsApp.Backend.Models
         public bool Baja { get; set; }
 
 
-        public virtual ICollection<Investmetn> Investemnts { get; set; }
+        public virtual ICollection<Investment> Investments { get; set; }
 
     }
 }
