@@ -18,7 +18,7 @@
             <tr>
                 <td>@type.Descripcion</td>
                 <td>
-                    <EditButton OnClick="() => NavigateToEditTypesInvestment(type.Id)" />
+                    <EditButton OnClick="() => HandleUpdateTypeInvestment(type.Id)" />
                     <DeleteButton OnClick="() => HandleDeleteTypesInvestment(type)" />
                 </td>
             </tr>
@@ -29,11 +29,6 @@
 @code {
     [Parameter]
     public IEnumerable<ClientSwagger.TypeInvestmentDto> TypesInvestments { get; set; }
-
-    private void NavigateToEditTypesInvestment(long id)
-    {
-        Navigation.NavigateTo($"/tipesInvestmentEditForm/{id}");
-    }
 
     private async Task ConfirmDeleteTypesInvestment(ClientSwagger.TypeInvestmentDto typeInvestment)
     {
@@ -48,11 +43,17 @@
     private async Task HandleDeleteTypesInvestment(ClientSwagger.TypeInvestmentDto typeInvestment)
     {
         await ConfirmDeleteTypesInvestment(typeInvestment);
-        Navigation.NavigateTo("/typesInvestmet");
+        Navigation.NavigateTo("/typesInvestment", forceLoad: true);
     }
 
     private async Task DeleteTypeInvestment(long id)
     {
         await TypeInvestmentService.DeleteTypeInvestment(id);
     }
+
+    private void HandleUpdateTypeInvestment(long id)
+    {
+        Navigation.NavigateTo($"/typeInvestmentUpdate/{id}");
+    }
+
 }

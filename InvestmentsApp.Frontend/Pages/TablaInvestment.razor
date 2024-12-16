@@ -20,7 +20,7 @@
     <tbody>
         @foreach (var investment in Investments)
         {
-            <tr>
+            <tr @onclick="() => HandleDetailInvestment(investment.Id)">
                 <td>@investment.Tikcker</td>
                 <td>@investment.TypeInvestmentDescripcion</td>
                 <td>@investment.FechaCierre.ToLocalTime().ToString("dd/MM/yyyy")</td>
@@ -65,6 +65,12 @@
     private async Task DeleteInvestment(long id)
     {
         await InvestmentService.DeleteInvestment(id);
+    }
+
+    private async Task HandleDetailInvestment(long id)
+    {
+        Navigation.NavigateTo($"/investmentDetail/{id}");
+
     }
 }
 
