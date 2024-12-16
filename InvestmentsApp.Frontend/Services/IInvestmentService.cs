@@ -2,7 +2,7 @@
 {
     public interface IInvestmentService
     {
-        Task AddInvestment(ClientSwagger.InsertInvestmentDto dto);
+        Task<ClientSwagger.InvestmentDto> AddInvestment(ClientSwagger.InsertInvestmentDto dto);
 
         Task<ClientSwagger.InvestmentDto> GetSelectedInvestment(long id);
 

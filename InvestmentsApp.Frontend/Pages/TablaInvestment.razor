@@ -58,7 +58,8 @@
     private async Task HandleDeleteInvestment(ClientSwagger.InvestmentDto investment)
     {
         await ConfirmDeleteInvestment(investment);
-        Navigation.NavigateTo("/");
+        Navigation.NavigateTo("/", forceLoad: true);
+
     }
 
     private async Task DeleteInvestment(long id)
