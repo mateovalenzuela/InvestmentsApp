@@ -2,9 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace InvestmentsApp.Backend.Models
 {
-    public class Investmetn
+    public class Investment
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -12,7 +13,7 @@ namespace InvestmentsApp.Backend.Models
 
         [Required]
         [StringLength(15, MinimumLength = 2, ErrorMessage = "La descripcion debe tener entre 4 y 50 caracteres")]
-        public string Tikcker {  get; set; }
+        public string Ticker {  get; set; }
 
         [StringLength(200)]
         public string? Descripcion {  get; set; }

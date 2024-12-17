@@ -8,7 +8,7 @@ namespace InvestmentsApp.Backend.DTOs.Investment
     {
         public long Id { get; set; }
 
-        public string Tikcker { get; set; }
+        public string Ticker { get; set; }
 
         public string? Descripcion { get; set; }
 

@@ -1,5 +1,5 @@
 ﻿
-<button class="btn btn-primary btn-sm me-2" @onclick="HandleClick">Editar</button>
+<button class="btn btn-primary btn-sm me-2" @onclick:stopPropagation="true" @onclick="HandleClick">Editar</button>
 
 @code {
     [Parameter]

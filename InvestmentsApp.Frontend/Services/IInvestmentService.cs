@@ -11,5 +11,7 @@
         Task DeleteInvestment(long id);
 
         Task<IEnumerable<ClientSwagger.InvestmentDto>> GetInvestments();
+        Task<IEnumerable<ClientSwagger.InvestmentDto>> GetInvestmentsByTicker(string ticker);
+        Task<IEnumerable<ClientSwagger.InvestmentDto>> GetInvestmentsByIdTypeInvestment(long id);
     }
 }

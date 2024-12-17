@@ -1,13 +1,23 @@
 ﻿@page "/typesInvestment"
 @using InvestmentsApp.Frontend.Services
+@using InvestmentsApp.Frontend.Components
 @inject ITypeInvestmentService TypeInvestmentService
 @inject NavigationManager Navigation
 
-<h3 class="text-primary">Lista de tipos de Inversiones</h3>
-
 <div class="row">
 
-    <div class="col-md-6">
+    <div class="col-12">
+        <h3>Type Investment Manager</h3>
+    </div>
+
+    <div class="col-md-6 p-2">
+
+        <div class="">
+            <TypeInvestmentForm />
+        </div>
+    </div>
+
+    <div class="col-md-6 p-2">
         @if (typesInvestments == null)
         {
             <div class="alert alert-info">Cargando...</div>
@@ -18,15 +28,8 @@
         }
         else
         {
-            <TablaTypesInvestment TypesInvestments="@typesInvestments"  />
+            <TablaTypesInvestment TypesInvestments="@typesInvestments" />
         }
-    </div>
-
-    <div class="col-md-6">
-
-        <div class="border-dark rounded-1">
-            <TypeInvestmentForm />
-        </div>
     </div>
 </div>
 

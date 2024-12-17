@@ -1,40 +1,94 @@
 ﻿@page "/"
 @using InvestmentsApp.Frontend.Services
+@using InvestmentsApp.Frontend.Components
 @inject IInvestmentService InvestmentService
+@inject ITypeInvestmentService TypeInvestmentService
 @inject NavigationManager Navigation
 
-<h3 class="text-primary">Lista de Inversiones</h3>
+<div class="row">
+    <div class="col-12">
+        <h3 class="text-black">Lista de Inversiones</h3>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <AgregarButton OnClick="() => NavigateToAddInvestment()" />
+        <div class="row justify-content-between mb-3">
+                <!-- Botones principales alineados horizontalmente -->
+                <div class="col-sm-4 mb-3">
+                    <div class="p-2">
+                        <AgregarButton OnClick="() => NavigateToAddInvestment()" />
+                    </div>
+                    <div class="p-2">
+                        <button class="btn btn-primary" type="button" @onclick="GetInvestments">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 mb-3">
+                    <!-- Buscador por Ticker -->
+                    <div class="input-group mb-3">
+                        <input @bind="Ticker" class="form-control" placeholder="Buscar por Ticker..." aria-label="Buscar por Ticker" />
+                        <button class="btn btn-secondary" type="button" @onclick="GetInvestmentsByTicker">Buscar</button>
+                    </div>
+
+                    <!-- Selección de Tipo de Inversión -->
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <select id="type-investment-select" @bind="idTypeSearch" class="form-select">
+                                @if (typesInvestments == null || !typesInvestments.Any())
+                                {
+                                    <option disabled value="">No hay categorías cargadas</option>
+                                }
+                                else
+                                {
+                                    <option value="">Seleccione un tipo</option>
+                                    @foreach (var tipo in typesInvestments)
+                                    {
+                                        <option value="@tipo.Id">@tipo.Descripcion</option>
+                                    }
+                                }
+                            </select>
+                            <button class="btn btn-secondary" type="button" @onclick="GetInvestmentsByIdTypeInvestment">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+                
+        </div>
+    </div>
+
+    <div class=" col-12 justify-content-center">
+        @if (investments == null)
+        {
+            <div class="alert alert-info">Cargando...</div>
+        }
+        else @if (investments.Count() == 0)
+        {
+            <div class="alert alert-warning">No hay inversiones cargadas</div>
+        }
+        else
+        {
+            <TablaInvestment Investments="@investments"></TablaInvestment>
+        }
+    </div>
 </div>
 
-@if (investments == null)
-{
-    <div class="alert alert-info">Cargando...</div>
-}
-else @if (investments.Count() == 0)
-{
-    <div class="alert alert-warning">No hay inversiones cargadas</div>
-}
-else
-{
-    <TablaInvestment Investments="@investments"></TablaInvestment>
-}
+
+
+
 
 @code {
     private IEnumerable<ClientSwagger.InvestmentDto>? investments;
+    private string Ticker = "";
+    private long idTypeSearch;
+    private IEnumerable<ClientSwagger.TypeInvestmentDto>? typesInvestments;
 
     protected override async Task OnInitializedAsync()
     {
         try {
             await GetInvestments();
+            await GetTypesInvestments();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error al obtener las inversiónes: {ex.Message}");
         }
-        
+
     }
 
     private async Task GetInvestments()
@@ -42,9 +96,23 @@ else
         investments = await InvestmentService.GetInvestments();
     }
 
+    private async Task GetInvestmentsByTicker()
+    {
+        investments = await InvestmentService.GetInvestmentsByTicker(Ticker);
+    }
+
+    private async Task GetInvestmentsByIdTypeInvestment()
+    {
+        investments = await InvestmentService.GetInvestmentsByIdTypeInvestment(idTypeSearch);
+    }
+
     private void NavigateToAddInvestment()
     {
         Navigation.NavigateTo("/investmentAddForm");
     }
-   
+
+    private async Task GetTypesInvestments()
+    {
+        typesInvestments = await TypeInvestmentService.GetTypesInvestment();
+    }
 }

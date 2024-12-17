@@ -53,10 +53,38 @@ namespace InvestmentsApp.Frontend.Services
         public async Task<IEnumerable<InvestmentDto>> GetInvestments()
             => await _apiClient.InvestmentAllAsync();
 
+        public async Task<IEnumerable<InvestmentDto>> GetInvestmentsByIdTypeInvestment(long id)
+        {
+            try
+            {
+                var invetments = await _apiClient.ByIdTypeInvestmentAsync(id);
+                return invetments;
+            }
+            catch (ApiException ex) 
+            {
+                return new List<InvestmentDto>();
+            }
+        
+        }
+
+
+        public async Task<IEnumerable<InvestmentDto>> GetInvestmentsByTicker(string ticker)
+        {
+            try
+            {
+                var investments = await _apiClient.ByTickerAsync(ticker);
+                return investments;
+            }
+            catch (ApiException ex)
+            {
+                return new List<InvestmentDto>();
+            }
+        }
+           
+
         public async Task<InvestmentDto> GetSelectedInvestment(long id)
             => await _apiClient.InvestmentGETAsync(id);
        
-
         public async Task UpdateInvestment(long id, UpdateInvestmentDto dto)
         {
             await _apiClient.InvestmentPUTAsync(id, dto);
