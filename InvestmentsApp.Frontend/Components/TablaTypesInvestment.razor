@@ -38,18 +38,23 @@
         if (confirmed)
         {
             await DeleteTypeInvestment(typeInvestment.Id);
+            Navigation.NavigateTo("/typesInvestment", forceLoad: true);
         }
     }
 
     private async Task HandleDeleteTypesInvestment(ClientSwagger.TypeInvestmentDto typeInvestment)
     {
         await ConfirmDeleteTypesInvestment(typeInvestment);
-        Navigation.NavigateTo("/typesInvestment", forceLoad: true);
     }
 
     private async Task DeleteTypeInvestment(long id)
     {
-        await TypeInvestmentService.DeleteTypeInvestment(id);
+        try {
+            await TypeInvestmentService.DeleteTypeInvestment(id);
+        }
+        catch (Exception ex) {
+            Console.WriteLine("Error al eliminar" + ex.ToString());
+        }
     }
 
     private void HandleUpdateTypeInvestment(long id)

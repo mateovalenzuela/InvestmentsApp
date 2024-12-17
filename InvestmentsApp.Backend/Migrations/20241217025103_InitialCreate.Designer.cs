@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InvestmentsApp.Backend.Migrations
 {
     [DbContext(typeof(InvestmentsAppContext))]
-    [Migration("20241216172800_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20241217025103_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
