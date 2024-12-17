@@ -52,8 +52,8 @@ var app = builder.Build();
 // Crear Db
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<InvestmentsAppContext>();
-    context.Database.Migrate();
+    var dbContext = scope.ServiceProvider.GetRequiredService<InvestmentsAppContext>();
+    dbContext.Database.Migrate(); // Aplica las migraciones pendientes
 }
 
 // Configure the HTTP request pipeline.

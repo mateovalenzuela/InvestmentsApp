@@ -10,45 +10,45 @@
         <h3 class="text-black">Lista de Inversiones</h3>
 
         <div class="row justify-content-between mb-3">
-                <!-- Botones principales alineados horizontalmente -->
-                <div class="col-sm-4 mb-3">
-                    <div class="p-2">
-                        <AgregarButton OnClick="() => NavigateToAddInvestment()" />
-                    </div>
-                    <div class="p-2">
-                        <button class="btn btn-primary" type="button" @onclick="GetInvestments">Refresh</button>
-                    </div>
+            <!-- Botones principales alineados horizontalmente -->
+            <div class="col-sm-4 mb-3">
+                <div class="p-2">
+                    <AgregarButton OnClick="() => NavigateToAddInvestment()" />
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-primary" type="button" @onclick="GetInvestments">Refresh</button>
+                </div>
+            </div>
+
+            <div class="col-sm-4 mb-3">
+                <!-- Buscador por Ticker -->
+                <div class="input-group mb-3">
+                    <input @bind="Ticker" class="form-control" placeholder="Buscar por Ticker..." aria-label="Buscar por Ticker" />
+                    <button class="btn btn-secondary" type="button" @onclick="GetInvestmentsByTicker">Buscar</button>
                 </div>
 
-                <div class="col-sm-4 mb-3">
-                    <!-- Buscador por Ticker -->
-                    <div class="input-group mb-3">
-                        <input @bind="Ticker" class="form-control" placeholder="Buscar por Ticker..." aria-label="Buscar por Ticker" />
-                        <button class="btn btn-secondary" type="button" @onclick="GetInvestmentsByTicker">Buscar</button>
-                    </div>
-
-                    <!-- Selección de Tipo de Inversión -->
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <select id="type-investment-select" @bind="idTypeSearch" class="form-select">
-                                @if (typesInvestments == null || !typesInvestments.Any())
+                <!-- Selección de Tipo de Inversión -->
+                <div class="mb-3">
+                    <div class="input-group">
+                        <select id="type-investment-select" @bind="idTypeSearch" class="form-select">
+                            @if (typesInvestments == null || !typesInvestments.Any())
+                            {
+                                <option disabled value="">No hay categorías cargadas</option>
+                            }
+                            else
+                            {
+                                <option value="">Seleccione un tipo</option>
+                                @foreach (var tipo in typesInvestments)
                                 {
-                                    <option disabled value="">No hay categorías cargadas</option>
+                                    <option value="@tipo.Id">@tipo.Descripcion</option>
                                 }
-                                else
-                                {
-                                    <option value="">Seleccione un tipo</option>
-                                    @foreach (var tipo in typesInvestments)
-                                    {
-                                        <option value="@tipo.Id">@tipo.Descripcion</option>
-                                    }
-                                }
-                            </select>
-                            <button class="btn btn-secondary" type="button" @onclick="GetInvestmentsByIdTypeInvestment">Buscar</button>
-                        </div>
+                            }
+                        </select>
+                        <button class="btn btn-secondary" type="button" @onclick="GetInvestmentsByIdTypeInvestment">Buscar</button>
                     </div>
                 </div>
-                
+            </div>
+
         </div>
     </div>
 
@@ -93,17 +93,37 @@
 
     private async Task GetInvestments()
     {
-        investments = await InvestmentService.GetInvestments();
+        try {
+            investments = await InvestmentService.GetInvestments();
+        }
+        catch (Exception ex){
+            investments = null;
+        }
     }
 
     private async Task GetInvestmentsByTicker()
     {
-        investments = await InvestmentService.GetInvestmentsByTicker(Ticker);
+
+        try
+        {
+            investments = await InvestmentService.GetInvestmentsByTicker(Ticker);
+        }
+        catch (Exception ex)
+        {
+            investments = null;
+        }
     }
 
     private async Task GetInvestmentsByIdTypeInvestment()
     {
-        investments = await InvestmentService.GetInvestmentsByIdTypeInvestment(idTypeSearch);
+        try
+        {
+            investments = await InvestmentService.GetInvestmentsByIdTypeInvestment(idTypeSearch);
+        }
+        catch (Exception ex)
+        {
+            investments = null;
+        }
     }
 
     private void NavigateToAddInvestment()
@@ -113,6 +133,14 @@
 
     private async Task GetTypesInvestments()
     {
-        typesInvestments = await TypeInvestmentService.GetTypesInvestment();
+        try
+        {
+            typesInvestments = await TypeInvestmentService.GetTypesInvestment();
+
+        }
+        catch (Exception ex)
+        {
+            typesInvestments = null;
+        }
     }
 }

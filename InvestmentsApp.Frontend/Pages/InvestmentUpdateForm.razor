@@ -96,6 +96,8 @@
         }
         catch (Exception ex)
         {
+            tiposDeInversion = null;
+            investmentToEdit = new();
             Console.WriteLine($"Error al cargar los datos: {ex.Message}");
         }
     }

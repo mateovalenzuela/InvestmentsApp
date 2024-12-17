@@ -48,10 +48,18 @@
 
     private async Task InitializeTypeInvestmentForUpdate()
     {
-        updateTypeInvestment = new ClientSwagger.UpdateTypeInvestmentDto();
+        try
+        {
+            updateTypeInvestment = new ClientSwagger.UpdateTypeInvestmentDto();
 
-        TypeInvestments = await TypeInvestmentService.GetSelectedTypeInvestment(id);
-        updateTypeInvestment.Descripcion = TypeInvestments.Descripcion;
+            TypeInvestments = await TypeInvestmentService.GetSelectedTypeInvestment(id);
+            updateTypeInvestment.Descripcion = TypeInvestments.Descripcion;
+        }
+        catch (Exception ex)
+        {
+            TypeInvestments = null;
+            updateTypeInvestment = new();
+        }
     }
 
 
@@ -63,7 +71,11 @@
 
     private async Task HandleUpdateTypeInvestment()
     {
-        await TypeInvestmentService.UpdateTypeInvestment(TypeInvestments.Id, updateTypeInvestment);
+        try {
+            await TypeInvestmentService.UpdateTypeInvestment(TypeInvestments.Id, updateTypeInvestment);
+        }catch (Exception ex) {
+            updateTypeInvestment = new();
+        }
     }
 
     private void HandleVolver(){
