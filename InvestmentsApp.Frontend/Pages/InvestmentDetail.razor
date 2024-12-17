@@ -3,51 +3,66 @@
 @inject IInvestmentService InvestmentService
 @inject NavigationManager Navigation
 
-<h3>Detalle de Inversión</h3>
+<div class="row justify-content-center pt-2">
+    <div class="col-8">
+        <div class="">
 
-@if (investment == null)
-{
-    <p>Cargando datos de la inversión...</p>
-}
-else
-{
-    <div class="card">
-        <div class="card-header">
-            <h4>@investment.Tikcker</h4>
-        </div>
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Ticker</dt>
-                <dd class="col-sm-8">@investment.Tikcker</dd>
+            <div class="">
+                <h3 class="card-title">Detalle de Inversión</h3>
+            </div>
 
-                <dt class="col-sm-4">Tipo de Inversión</dt>
-                <dd class="col-sm-8">@investment.TypeInvestmentDescripcion</dd>
+            <div class="">
+                @if (investment == null)
+                {
+                    <p>Cargando datos de la inversión...</p>
+                }
+                else
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="m-0">@investment.Ticker</h4>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-4 p-2">Ticker</dt>
+                                <dd class="col-sm-8 p-2">@investment.Ticker</dd>
 
-                <dt class="col-sm-4">Descripción</dt>
-                <dd class="col-sm-8">@investment.Descripcion</dd>
+                                <dt class="col-sm-4 p-2">Tipo de Inversión</dt>
+                                <dd class="col-sm-8 p-2">@investment.TypeInvestmentDescripcion</dd>
 
-                <dt class="col-sm-4">Fecha de Entrada</dt>
-                <dd class="col-sm-8">@investment.FechaEntrada.ToLocalTime().ToString("dd/MM/yyyy")</dd>
+                                <dt class="col-sm-4 p-2">Descripción</dt>
+                                <dd class="col-sm-8 p-2">@investment.Descripcion</dd>
 
-                <dt class="col-sm-4">Fecha de Cierre</dt>
-                <dd class="col-sm-8">@investment.FechaCierre.ToLocalTime().ToString("dd/MM/yyyy")</dd>
+                                <dt class="col-sm-4 p-2">Fecha de Entrada</dt>
+                                <dd class="col-sm-8 p-2">@investment.FechaEntrada.ToLocalTime().ToString("dd/MM/yyyy")</dd>
 
-                <dt class="col-sm-4">Importe Inicial</dt>
-                <dd class="col-sm-8">$@investment.ImporteInicial</dd>
+                                <dt class="col-sm-4 p-2">Fecha de Cierre</dt>
+                                <dd class="col-sm-8 p-2">@investment.FechaCierre.ToLocalTime().ToString("dd/MM/yyyy")</dd>
 
-                <dt class="col-sm-4">Importe Final</dt>
-                <dd class="col-sm-8">$@investment.ImporteFinal</dd>
+                                <dt class="col-sm-4 p-2">Importe Inicial</dt>
+                                <dd class="col-sm-8 p-2">$@investment.ImporteInicial</dd>
 
-                <dt class="col-sm-4">Rendimiento</dt>
-                <dd class="col-sm-8">@investment.Rendimiento.ToString("0.00")%</dd>
+                                <dt class="col-sm-4 p-2">Importe Final</dt>
+                                <dd class="col-sm-8 p-2">$@investment.ImporteFinal</dd>
 
-                <dt class="col-sm-4">Fecha de Registro</dt>
-                <dd class="col-sm-8">@investment.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy")</dd>
-            </dl>
-            <button class="btn btn-primary" @onclick="NavigateBack">Volver</button>
+                                <dt class="col-sm-4 p-2">Rendimiento</dt>
+                                <dd class="col-sm-8 p-2">@investment.Rendimiento.ToString("0.00")%</dd>
+
+                                <dt class="col-sm-4 p-2">Fecha de Registro</dt>
+                                <dd class="col-sm-8 p-2">@investment.FechaCreacion.ToLocalTime().ToString("dd/MM/yyyy")</dd>
+                            </dl>
+                            <button class="btn btn-primary" @onclick="NavigateBack">Volver</button>
+                        </div>
+                    </div>
+                }
+            </div>
+
         </div>
     </div>
-}
+</div>
+
+
+
 
 @code {
     [Parameter]

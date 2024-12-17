@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InvestmentsApp.Backend.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class FirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,12 +25,12 @@ namespace InvestmentsApp.Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Investmetns",
+                name: "Investments",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Tikcker = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Ticker = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     ImporteInicial = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ImporteFinal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -42,9 +42,9 @@ namespace InvestmentsApp.Backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Investmetns", x => x.Id);
+                    table.PrimaryKey("PK_Investments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Investmetns_TypeInvestments_IdTypeInvestment",
+                        name: "FK_Investments_TypeInvestments_IdTypeInvestment",
                         column: x => x.IdTypeInvestment,
                         principalTable: "TypeInvestments",
                         principalColumn: "Id",
@@ -52,20 +52,20 @@ namespace InvestmentsApp.Backend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Investmetns_IdTypeInvestment",
-                table: "Investmetns",
+                name: "IX_Investments_IdTypeInvestment",
+                table: "Investments",
                 column: "IdTypeInvestment");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Investmetns_Tikcker",
-                table: "Investmetns",
-                column: "Tikcker");
+                name: "IX_Investments_Ticker",
+                table: "Investments",
+                column: "Ticker");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Investmetns");
+                name: "Investments");
 
             migrationBuilder.DropTable(
                 name: "TypeInvestments");

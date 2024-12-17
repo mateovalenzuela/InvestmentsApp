@@ -25,7 +25,7 @@ namespace InvestmentsApp.Backend.Services
 
         public async Task<InvestmentDto> Add(InsertInvestmentDto dto)
         {
-            var investment = _mapper.Map<Investmetn>(dto);
+            var investment = _mapper.Map<Investment>(dto);
             investment = InitializeDefaultProps(investment);
 
             investment.TypeInvestment = await _typeInvestmentRepository.GetActive(dto.IdTypeInvestment);
@@ -106,7 +106,7 @@ namespace InvestmentsApp.Backend.Services
 
             if (investment != null)
             {
-                investment.Tikcker = dto.Tikcker;
+                investment.Ticker = dto.Ticker;
                 investment.ImporteInicial = dto.ImporteInicial;
                 investment.ImporteFinal = dto.ImporteFinal;
                 investment.Descripcion = dto.Descripcion;
@@ -164,7 +164,7 @@ namespace InvestmentsApp.Backend.Services
             return flag;
         }
 
-        private static Investmetn InitializeDefaultProps(Investmetn entity)
+        private static Investment InitializeDefaultProps(Investment entity)
         {
             entity.Baja = false;
             return entity;

@@ -9,7 +9,7 @@ namespace InvestmentsApp.Backend.DTOs.Investment
     {
         [Required]
         [StringLength(15, MinimumLength = 2, ErrorMessage = "La descripcion debe tener entre 4 y 50 caracteres")]
-        public string Tikcker { get; set; }
+        public string Ticker { get; set; }
 
         [StringLength(200, ErrorMessage = "La descripcion debe tener menos de 200 caracteres")]
         public string? Descripcion { get; set; }

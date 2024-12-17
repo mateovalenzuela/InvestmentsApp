@@ -1,6 +1,6 @@
 ﻿@inject NavigationManager Navigation
 
-<button class="btn btn-success" @onclick="HandleClick">Agregar Inversión</button>
+<button class="btn btn-success" @onclick:stopPropagation="true" @onclick="HandleClick">Agregar</button>
 
 @code {
     [Parameter]

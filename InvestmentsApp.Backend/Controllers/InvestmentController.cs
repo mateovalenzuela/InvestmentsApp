@@ -34,7 +34,7 @@ namespace InvestmentsApp.Backend.Controllers
 
         // GET api/<InvestmentController>/byTicker/ticker
         [HttpGet("byTicker/{ticker}")]
-        public async Task<ActionResult<InvestmentDto>> GetByTicker(string ticker)
+        public async Task<ActionResult<IEnumerable<InvestmentDto>>> GetByTicker(string ticker)
         {
             var investmentDto = await _service.GetByTicker(ticker);
             return investmentDto == null ? NotFound() : Ok(investmentDto);
@@ -43,7 +43,7 @@ namespace InvestmentsApp.Backend.Controllers
 
         // GET api/<InvestmentController>/5
         [HttpGet("byIdTypeInvestment/{idTypeInvestment}")]
-        public async Task<ActionResult<InvestmentDto>> GetByIdTypeInvestment(long idTypeInvestment)
+        public async Task<ActionResult<IEnumerable<InvestmentDto>>> GetByIdTypeInvestment(long idTypeInvestment)
         {
             var investmentDto = await _service.GetByTypeInvestment(idTypeInvestment);
             return investmentDto == null ? NotFound() : Ok(investmentDto);

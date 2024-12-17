@@ -1,0 +1,52 @@
+﻿@using InvestmentsApp.Frontend.Services
+@inject ITypeInvestmentService TypeInvestmentService
+@inject NavigationManager Navigation
+
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="card-title">Agregar tipo de Inversión</h3>
+    </div>
+    
+    <div class="card-body">
+        <EditForm Model="@newTypeInvestment" OnValidSubmit="HandleSaveForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label class="form-label">Descripción:</label>
+                <InputText @bind-Value="newTypeInvestment.Descripcion" class="form-control" />
+                <ValidationMessage For="@(() => newTypeInvestment.Descripcion)" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Agregar</button>
+
+        </EditForm>
+    </div>
+    
+</div>
+
+
+@code {
+    private ClientSwagger.InsertTypeInvestmentDto newTypeInvestment = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        newTypeInvestment = new ClientSwagger.InsertTypeInvestmentDto();
+    }
+
+    private async Task HandleAddTypeInvestment()
+    {
+        var result = await TypeInvestmentService.AddTypeInvestment(newTypeInvestment);
+    }
+
+
+    private async Task HandleSaveForm()
+    {
+        await HandleAddTypeInvestment();
+        Navigation.NavigateTo("/typesInvestment", forceLoad: true);
+    }
+
+
+}
+

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InvestmentsApp.Backend.Migrations
 {
     [DbContext(typeof(InvestmentsAppContext))]
-    [Migration("20241213184727_InitDb")]
-    partial class InitDb
+    [Migration("20241216172800_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace InvestmentsApp.Backend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("InvestmentsApp.Backend.Models.Investmetn", b =>
+            modelBuilder.Entity("InvestmentsApp.Backend.Models.Investment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +57,7 @@ namespace InvestmentsApp.Backend.Migrations
                     b.Property<decimal>("ImporteInicial")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Tikcker")
+                    b.Property<string>("Ticker")
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
@@ -66,9 +66,9 @@ namespace InvestmentsApp.Backend.Migrations
 
                     b.HasIndex("IdTypeInvestment");
 
-                    b.HasIndex("Tikcker");
+                    b.HasIndex("Ticker");
 
-                    b.ToTable("Investmetns");
+                    b.ToTable("Investments");
                 });
 
             modelBuilder.Entity("InvestmentsApp.Backend.Models.TypeInvestment", b =>
@@ -95,10 +95,10 @@ namespace InvestmentsApp.Backend.Migrations
                     b.ToTable("TypeInvestments");
                 });
 
-            modelBuilder.Entity("InvestmentsApp.Backend.Models.Investmetn", b =>
+            modelBuilder.Entity("InvestmentsApp.Backend.Models.Investment", b =>
                 {
                     b.HasOne("InvestmentsApp.Backend.Models.TypeInvestment", "TypeInvestment")
-                        .WithMany("Investemnts")
+                        .WithMany("Investments")
                         .HasForeignKey("IdTypeInvestment")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -108,7 +108,7 @@ namespace InvestmentsApp.Backend.Migrations
 
             modelBuilder.Entity("InvestmentsApp.Backend.Models.TypeInvestment", b =>
                 {
-                    b.Navigation("Investemnts");
+                    b.Navigation("Investments");
                 });
 #pragma warning restore 612, 618
         }
