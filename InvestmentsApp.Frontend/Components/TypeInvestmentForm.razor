@@ -7,7 +7,7 @@
     <div class="card-header">
         <h3 class="card-title">Agregar tipo de Inversión</h3>
     </div>
-    
+
     <div class="card-body">
         <EditForm Model="@newTypeInvestment" OnValidSubmit="HandleSaveForm">
             <DataAnnotationsValidator />
@@ -23,7 +23,7 @@
 
         </EditForm>
     </div>
-    
+
 </div>
 
 
@@ -43,10 +43,15 @@
 
     private async Task HandleSaveForm()
     {
-        await HandleAddTypeInvestment();
-        Navigation.NavigateTo("/typesInvestment", forceLoad: true);
+        try {
+            await HandleAddTypeInvestment();
+        }
+        catch (Exception ex){
+            Console.WriteLine("Error al agregar: " + ex.ToString());
+        }
+        finally{
+            Navigation.NavigateTo("/typesInvestment", forceLoad: true);
+        }
     }
-
-
 }
 

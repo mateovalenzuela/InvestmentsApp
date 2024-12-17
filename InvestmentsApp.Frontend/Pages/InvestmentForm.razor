@@ -91,15 +91,28 @@
 
     protected override async Task OnInitializedAsync()
     {
-        newInvestment = new ClientSwagger.InsertInvestmentDto();
-        tiposDeInversion = await GetTypeInvestment();
+        try{
+
+            newInvestment = new ClientSwagger.InsertInvestmentDto();
+            tiposDeInversion = await GetTypeInvestment();
+
+        } catch (Exception ex) {
+            tiposDeInversion = null;
+            newInvestment = new ClientSwagger.InsertInvestmentDto();
+        }
+
     }
 
     private async Task HandleSaveInvestment()
     {
-
-        var result = await InvestmentService.AddInvestment(newInvestment);
-        Navigation.NavigateTo("/");
+        try {
+            var result = await InvestmentService.AddInvestment(newInvestment);
+            Navigation.NavigateTo("/");
+        } catch (Exception ex){
+            Console.WriteLine("Error al agregar: " + ex.ToString());
+            Navigation.NavigateTo("/");
+        }
+        
     }
 
 

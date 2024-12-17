@@ -57,19 +57,23 @@
         if (confirmed)
         {
             await DeleteInvestment(investment.Id);
+            Navigation.NavigateTo("/", forceLoad: true);
         }
     }
 
     private async Task HandleDeleteInvestment(ClientSwagger.InvestmentDto investment)
     {
         await ConfirmDeleteInvestment(investment);
-        Navigation.NavigateTo("/", forceLoad: true);
-
     }
 
     private async Task DeleteInvestment(long id)
     {
-        await InvestmentService.DeleteInvestment(id);
+        try {
+            await InvestmentService.DeleteInvestment(id);
+        }
+        catch (Exception ex){
+            Console.WriteLine("Error al eliminar" + ex.ToString());
+        }
     }
 
     private async Task HandleDetailInvestment(long id)
