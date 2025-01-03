@@ -31,6 +31,9 @@
     [Parameter]
     public IEnumerable<ClientSwagger.TypeInvestmentDto> TypesInvestments { get; set; }
 
+    [Parameter]
+    public EventCallback GetTypesInvestment { get; set; }
+
     private async Task ConfirmDeleteTypesInvestment(ClientSwagger.TypeInvestmentDto typeInvestment)
     {
         var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Estás seguro de que deseas eliminr el tipo de Inversión {typeInvestment.Descripcion}?");
@@ -38,7 +41,7 @@
         if (confirmed)
         {
             await DeleteTypeInvestment(typeInvestment.Id);
-            Navigation.NavigateTo("/typesInvestment", forceLoad: true);
+            await GetTypesInvestment.InvokeAsync();
         }
     }
 
