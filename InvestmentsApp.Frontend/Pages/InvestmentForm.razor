@@ -1,123 +1,168 @@
-﻿@page "/investmentAddForm"
+﻿@page "/investmentForm/{id:long?}"
 @using InvestmentsApp.Frontend.Services
 @inject IInvestmentService InvestmentService
 @inject ITypeInvestmentService TypeInvestmentService
 @inject NavigationManager Navigation
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-6">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Agregar Inversión</h3>
+                <h3 class="card-title">@FormTitle</h3>
             </div>
-
             <div class="card-body">
-                <EditForm Model="@newInvestment" OnValidSubmit="HandleSaveInvestment">
+                <EditForm Model="@investmentDto" OnValidSubmit="HandleSaveInvestment">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
 
+                    <!-- Campos del formulario -->
                     <div class="mb-3">
                         <label class="form-label">Ticker:</label>
-                        <InputText @bind-Value="newInvestment.Ticker" class="form-control" />
-                        <ValidationMessage For="@(() => newInvestment.Ticker)" />
+                        <InputText @bind-Value="investmentDto.Ticker" class="form-control" />
+                        <ValidationMessage For="@(() => insertInvestmentDto.Ticker)" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Tipo de Inversión:</label>
-                        <select @bind="newInvestment.IdTypeInvestment" class="form-select">
-
-                            @if (tiposDeInversion == null)
+                        <select @bind="investmentDto.IdTypeInvestment" class="form-select">
+                            @if (tiposDeInversion == null || !tiposDeInversion.Any())
                             {
-                                <option disable value="">"No hay categorias cargadas"</option>
+                                <option disabled value="">No hay categorías cargadas</option>
                             }
                             else
                             {
                                 <option value="">Seleccione un tipo</option>
-
                                 @foreach (var tipo in tiposDeInversion)
                                 {
                                     <option value="@tipo.Id">@tipo.Descripcion</option>
                                 }
                             }
-
                         </select>
-                        <ValidationMessage For="@(() => newInvestment.IdTypeInvestment)" />
+                        <ValidationMessage For="@(() => insertInvestmentDto.IdTypeInvestment)" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Descripción:</label>
-                        <InputText @bind-Value="newInvestment.Descripcion" class="form-control" />
-                        <ValidationMessage For="@(() => newInvestment.Descripcion)" />
+                        <InputText @bind-Value="investmentDto.Descripcion" class="form-control" />
+                        <ValidationMessage For="@(() => insertInvestmentDto.Descripcion)" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Fecha de Entrada:</label>
-                        <InputDate @bind-Value="newInvestment.FechaEntrada" class="form-control" />
-                        <ValidationMessage For="@(() => newInvestment.FechaEntrada)" />
+                        <InputDate @bind-Value="investmentDto.FechaEntrada" class="form-control" />
+                        <ValidationMessage For="@(() => insertInvestmentDto.FechaEntrada)" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Fecha de Cierre:</label>
-                        <InputDate @bind-Value="newInvestment.FechaCierre" class="form-control" />
-                        <ValidationMessage For="@(() => newInvestment.FechaCierre)" />
+                        <InputDate @bind-Value="investmentDto.FechaCierre" class="form-control" />
+                        <ValidationMessage For="@(() => insertInvestmentDto.FechaCierre)" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Importe Inicial:</label>
-                        <InputNumber @bind-Value="newInvestment.ImporteInicial" class="form-control" />
-                        <ValidationMessage For="@(() => newInvestment.ImporteInicial)" />
+                        <InputNumber @bind-Value="investmentDto.ImporteInicial" class="form-control" />
+                        <ValidationMessage For="@(() => insertInvestmentDto.ImporteInicial)" />
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Importe Final:</label>
-                        <InputNumber @bind-Value="newInvestment.ImporteFinal" class="form-control" />
-                        <ValidationMessage For="@(() => newInvestment.ImporteFinal)" />
+                        <InputNumber @bind-Value="investmentDto.ImporteFinal" class="form-control" />
+                        <ValidationMessage For="@(() => insertInvestmentDto.ImporteFinal)" />
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary">@ButtonText</button>
                 </EditForm>
-
             </div>
         </div>
     </div>
 </div>
 
-
-
-
 @code {
-    private ClientSwagger.InsertInvestmentDto newInvestment = new();
+    [Parameter] public long? id { get; set; }
+    private ClientSwagger.InvestmentDto investmentDto = new();
+    private ClientSwagger.InsertInvestmentDto insertInvestmentDto = new();
+    private ClientSwagger.UpdateInvestmentDto updateInvestmentDto = new();
     private IEnumerable<ClientSwagger.TypeInvestmentDto>? tiposDeInversion;
+
+    private string FormTitle => id.HasValue && id > 0 ? "Editar Inversión" : "Agregar Inversión";
+    private string ButtonText => id.HasValue && id > 0 ? "Actualizar" : "Guardar";
 
     protected override async Task OnInitializedAsync()
     {
-        try{
+        tiposDeInversion = await GetTypeInvestment();
 
-            newInvestment = new ClientSwagger.InsertInvestmentDto();
-            tiposDeInversion = await GetTypeInvestment();
-
-        } catch (Exception ex) {
-            tiposDeInversion = null;
-            newInvestment = new ClientSwagger.InsertInvestmentDto();
+        if (id.HasValue && id > 0)
+        {
+            // Modo edición
+            var investment = await GetSelectedInvestment(id.Value);
+            investmentDto = new ClientSwagger.InvestmentDto
+            {
+                Ticker = investment.Ticker,
+                Descripcion = investment.Descripcion,
+                FechaEntrada = investment.FechaEntrada,
+                FechaCierre = investment.FechaCierre,
+                ImporteInicial = investment.ImporteInicial,
+                ImporteFinal = investment.ImporteFinal,
+                IdTypeInvestment = investment.IdTypeInvestment
+            };
         }
-
+        else
+        {
+            // Modo creación
+            investmentDto = new ClientSwagger.InvestmentDto();
+        }
     }
 
     private async Task HandleSaveInvestment()
     {
-        try {
-            var result = await InvestmentService.AddInvestment(newInvestment);
-            Navigation.NavigateTo("/");
-        } catch (Exception ex){
-            Console.WriteLine("Error al agregar: " + ex.ToString());
-            Navigation.NavigateTo("/");
+        if (id.HasValue && id > 0)
+        {
+            await UpdateInvestment();
         }
-        
+        else
+        {
+            await AddInvestment();
+        }
+
+        Navigation.NavigateTo("/");
     }
 
+    private async Task AddInvestment()
+    {
+        var insertDto = new ClientSwagger.InsertInvestmentDto
+        {
+            Ticker = investmentDto.Ticker,
+            Descripcion = investmentDto.Descripcion,
+            FechaEntrada = investmentDto.FechaEntrada,
+            FechaCierre = investmentDto.FechaCierre,
+            ImporteInicial = investmentDto.ImporteInicial,
+            ImporteFinal = investmentDto.ImporteFinal,
+            IdTypeInvestment = investmentDto.IdTypeInvestment,
+            FechaCreacion = DateTime.Now
+        };
+        await InvestmentService.AddInvestment(insertDto);
+    }
+
+    private async Task UpdateInvestment()
+    {
+        updateInvestmentDto = new ClientSwagger.UpdateInvestmentDto
+        {
+            Ticker = investmentDto.Ticker,
+            Descripcion = investmentDto.Descripcion,
+            FechaEntrada = investmentDto.FechaEntrada,
+            FechaCierre = investmentDto.FechaCierre,
+            ImporteInicial = investmentDto.ImporteInicial,
+            ImporteFinal = investmentDto.ImporteFinal,
+            IdTypeInvestment = investmentDto.IdTypeInvestment
+        };
+        await InvestmentService.UpdateInvestment(id.Value, updateInvestmentDto);
+    }
 
     private async Task<IEnumerable<ClientSwagger.TypeInvestmentDto>> GetTypeInvestment()
-        =>  await TypeInvestmentService.GetTypesInvestment();
-    
-}
+        => await TypeInvestmentService.GetTypesInvestment();
 
+    private async Task<ClientSwagger.InvestmentDto> GetSelectedInvestment(long id)
+        => await InvestmentService.GetSelectedInvestment(id);
+
+}
