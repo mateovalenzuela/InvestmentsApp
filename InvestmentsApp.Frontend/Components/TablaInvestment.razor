@@ -45,9 +45,12 @@
     [Parameter]
     public IEnumerable<ClientSwagger.InvestmentDto> Investments { get; set; }
 
+    [Parameter]
+    public EventCallback GetInvestments { get; set; }
+
     private void NavigateToEditInvestment(long id)
     {
-        Navigation.NavigateTo($"/investmentEditForm/{id}");
+        Navigation.NavigateTo($"/investmentForm/{id}");
     }
 
     private async Task ConfirmDeleteInvestment(ClientSwagger.InvestmentDto investment)
@@ -57,7 +60,7 @@
         if (confirmed)
         {
             await DeleteInvestment(investment.Id);
-            Navigation.NavigateTo("/", forceLoad: true);
+            await GetInvestments.InvokeAsync();
         }
     }
 

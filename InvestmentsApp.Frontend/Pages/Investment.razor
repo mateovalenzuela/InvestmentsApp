@@ -63,7 +63,7 @@
         }
         else
         {
-            <TablaInvestment Investments="@investments"></TablaInvestment>
+            <TablaInvestment Investments="@investments" GetInvestments="@GetInvestments"></TablaInvestment>
         }
     </div>
 </div>
@@ -128,7 +128,7 @@
 
     private void NavigateToAddInvestment()
     {
-        Navigation.NavigateTo("/investmentAddForm");
+        Navigation.NavigateTo("/investmentForm");
     }
 
     private async Task GetTypesInvestments()
