@@ -3,55 +3,112 @@
 @inject NavigationManager Navigation
 
 <div class="card">
-
     <div class="card-header">
-        <h3 class="card-title">Agregar tipo de Inversión</h3>
+        <h3 class="card-title">@FormTitle</h3>
     </div>
 
     <div class="card-body">
-        <EditForm Model="@newTypeInvestment" OnValidSubmit="HandleSaveForm">
+        <EditForm Model="@typeInvestmentDto" OnValidSubmit="HandleSaveForm">
             <DataAnnotationsValidator />
             <ValidationSummary />
 
             <div class="mb-3">
                 <label class="form-label">Descripción:</label>
-                <InputText @bind-Value="newTypeInvestment.Descripcion" class="form-control" />
-                <ValidationMessage For="@(() => newTypeInvestment.Descripcion)" />
+                <InputText @bind-Value="typeInvestmentDto.Descripcion" class="form-control" />
+                <ValidationMessage For="@(() => typeInvestmentDto.Descripcion)" />
             </div>
 
-            <button type="submit" class="btn btn-primary">Agregar</button>
-
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">@ButtonText</button>
+                @if (Id.HasValue)
+                {
+                    <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Cancelar</button>
+                }
+            </div>
         </EditForm>
     </div>
-
 </div>
 
-
 @code {
-    private ClientSwagger.InsertTypeInvestmentDto newTypeInvestment = new();
+    [Parameter]
+    public long? Id { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    [Parameter]
+    public EventCallback GetTypesInvestment { get; set; }
+
+    [Parameter]
+    public EventCallback ClearForm { get; set; }
+
+    private ClientSwagger.TypeInvestmentDto typeInvestmentDto = new();
+
+    private string FormTitle => Id.HasValue ? "Editar Tipo de Inversión" : "Agregar Tipo de Inversión";
+    private string ButtonText => Id.HasValue ? "Actualizar" : "Agregar";
+
+    protected override async Task OnParametersSetAsync()
     {
-        newTypeInvestment = new ClientSwagger.InsertTypeInvestmentDto();
+        if (Id.HasValue && Id > 0)
+        {
+            typeInvestmentDto = await GetSelectedTypeInvestment();
+        }
+        else
+        {
+            typeInvestmentDto = new ClientSwagger.TypeInvestmentDto();
+        }
     }
 
-    private async Task HandleAddTypeInvestment()
+    private async Task<ClientSwagger.TypeInvestmentDto> GetSelectedTypeInvestment()
     {
-        var result = await TypeInvestmentService.AddTypeInvestment(newTypeInvestment);
+        var selectedType = await TypeInvestmentService.GetSelectedTypeInvestment(Id.Value);
+        return new ClientSwagger.TypeInvestmentDto
+            {
+                Descripcion = selectedType.Descripcion
+            };
     }
-
 
     private async Task HandleSaveForm()
     {
-        try {
-            await HandleAddTypeInvestment();
+        try
+        {
+            if (Id.HasValue && Id > 0)
+            {
+                // Actualizar
+                await TypeInvestmentService.UpdateTypeInvestment(Id.Value, new ClientSwagger.UpdateTypeInvestmentDto
+                    {
+                        Descripcion = typeInvestmentDto.Descripcion
+                    });
+            }
+            else
+            {
+                // Crear
+                await TypeInvestmentService.AddTypeInvestment(new ClientSwagger.InsertTypeInvestmentDto
+                    {
+                        Descripcion = typeInvestmentDto.Descripcion,
+                        FechaCreacion = DateTime.Now
+                    });
+            }
+
+            ResetForm();
         }
-        catch (Exception ex){
-            Console.WriteLine("Error al agregar: " + ex.ToString());
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al guardar el tipo de inversión: {ex.Message}");
         }
-        finally{
-            Navigation.NavigateTo("/typesInvestment", forceLoad: true);
+        finally
+        {
+            if (GetTypesInvestment.HasDelegate)
+            {
+                await GetTypesInvestment.InvokeAsync();
+            }
         }
     }
-}
 
+    private void HandleCancel()
+    {
+        ResetForm();
+    }
+
+    private void ResetForm()
+    {
+        ClearForm.InvokeAsync();
+    }
+}
