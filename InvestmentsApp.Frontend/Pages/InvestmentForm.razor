@@ -71,7 +71,12 @@
                         <ValidationMessage For="@(() => insertInvestmentDto.ImporteFinal)" />
                     </div>
 
-                    <button type="submit" class="btn btn-primary">@ButtonText</button>
+                    <div class="justify-content-between">
+                        <button type="submit" class="btn btn-primary">@ButtonText</button>
+                        <button type="button" class="btn btn-secondary" @onclick="HandleCancel">Cancelar</button>
+                    </div>
+                    
+
                 </EditForm>
             </div>
         </div>
@@ -165,4 +170,8 @@
     private async Task<ClientSwagger.InvestmentDto> GetSelectedInvestment(long id)
         => await InvestmentService.GetSelectedInvestment(id);
 
+    private void HandleCancel()
+    {
+        Navigation.NavigateTo("/");
+    }
 }
