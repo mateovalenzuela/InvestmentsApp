@@ -1,65 +1,57 @@
 ﻿@using InvestmentsApp.Frontend.Services
 @inject ITypeInvestmentService TypeInvestmentService
-@inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 
-<div class="">
-    <table class="table table-striped table-responsive">
-        <thead class="table-dark">
+<table class="table table-striped table-responsive">
+    <thead class="table-dark">
+        <tr>
+            <th class="text-center">Descripción</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var type in TypesInvestments)
+        {
             <tr>
-                <th class="text-center" scope="col">Descripción</th>
-                <th class="text-center" scope="col">Acciones</th>
+                <td class="text-center">@type.Descripcion</td>
+                <td class="text-center">
+                    <EditButton OnClick="() => SelectToEdit.InvokeAsync(type.Id)" />
+                    <DeleteButton OnClick="() => HandleDelete(type.Id, type.Descripcion)" />
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var type in TypesInvestments)
-            {
-                <tr>
-                    <td class="text-center">@type.Descripcion</td>
-                    <td class="text-center">
-                        <EditButton OnClick="() => HandleUpdateTypeInvestment(type.Id)" />
-                        <DeleteButton OnClick="() => HandleDeleteTypesInvestment(type)" />
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
+        }
+    </tbody>
+</table>
 
 @code {
     [Parameter]
     public IEnumerable<ClientSwagger.TypeInvestmentDto> TypesInvestments { get; set; }
 
-    private async Task ConfirmDeleteTypesInvestment(ClientSwagger.TypeInvestmentDto typeInvestment)
-    {
-        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Estás seguro de que deseas eliminr el tipo de Inversión {typeInvestment.Descripcion}?");
+    [Parameter]
+    public EventCallback<long?> SelectToEdit { get; set; }
 
+    [Parameter]
+    public EventCallback GetTypesInvestment { get; set; }
+
+    private async Task HandleDelete(long id, string descripcion)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"¿Seguro que deseas eliminar '{descripcion}'?");
         if (confirmed)
         {
-            await DeleteTypeInvestment(typeInvestment.Id);
-            Navigation.NavigateTo("/typesInvestment", forceLoad: true);
+            await DeleteTypeInvestment(id);
+            await GetTypesInvestment.InvokeAsync();
         }
-    }
-
-    private async Task HandleDeleteTypesInvestment(ClientSwagger.TypeInvestmentDto typeInvestment)
-    {
-        await ConfirmDeleteTypesInvestment(typeInvestment);
     }
 
     private async Task DeleteTypeInvestment(long id)
     {
-        try {
+        try
+        {
             await TypeInvestmentService.DeleteTypeInvestment(id);
         }
-        catch (Exception ex) {
-            Console.WriteLine("Error al eliminar" + ex.ToString());
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al eliminar el tipo de inversión: {ex.Message}");
         }
     }
-
-    private void HandleUpdateTypeInvestment(long id)
-    {
-        Navigation.NavigateTo($"/typeInvestmentUpdate/{id}");
-    }
-
 }
